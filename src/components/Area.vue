@@ -2,14 +2,16 @@
   <div class="container">
     <div class="row">
 
-      <div class="col-6">
+      <!-- <div class="col-6">
         <ul class="list-group" id="area">
           <li class="list-group-item active">Area</li>
           <li class="list-group-item" v-for="(item, i) in response" :key="`item-${i}`">{{ item.name }}</li>
         </ul>
       </div>
 
-      <button class="btn btn-primary col-6" v-on:click="greet">Greeting</button>
+      <button class="btn btn-primary col-6" v-on:click="greet">Greeting</button> -->
+
+      <datatable id="dataTable" :columns="columns" :data="response"></datatable>
 
     </div>
   </div>
@@ -25,7 +27,15 @@ export default {
   name: 'Area',
   data () {
     return {
-      response: null
+      columns: [
+        {label: 'ID', field: 'id'},
+        {label: 'Name', field: 'name', headerClass: 'class-in-header second-class'},
+        {label: 'Country code', field: 'countryCode'},
+        {label: 'Parent area ID', field: 'parentAreaId'},
+        {label: 'Parent area', field: 'parentArea'},
+        // {label: 'Address', representedAs: ({address, city, state}) => `${address}<br />${city}, ${state}`, interpolate: true}
+      ],
+      response: []
     }
   },
 

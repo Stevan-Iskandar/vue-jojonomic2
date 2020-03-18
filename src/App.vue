@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <Area/>
+    <div v-html="scripts"></div>
   </div>
 </template>
 
@@ -12,17 +13,15 @@ export default {
   name: 'App',
   components: {
     Area
+  },
+  data () {
+    return {
+      scripts: `
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.4.2/vue.js" defer><\/script>
+      <script src="/dist/vuejs-datatable.js" defer><\/script>
+      <script src="/myscript.js" defer><\/script>
+      `
+    }
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
