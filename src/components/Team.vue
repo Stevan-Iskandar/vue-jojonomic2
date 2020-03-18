@@ -24,15 +24,15 @@ const headers = {
 }
 
 export default {
-  name: 'Area',
+  name: 'Team',
   data () {
     return {
       columns: [
         'no',
         'name',
-        'countryCode',
-        'parentAreaId',
-        'parentArea',
+        'shortName',
+        'address',
+        'venue',
         'id'
       ],
       response: [],
@@ -40,23 +40,23 @@ export default {
         headings: {
           no: 'No',
           name: 'Name',
-          countryCode: 'Country code',
-          parentAreaId: 'Parent area ID',
-          parentArea: 'Parent area',
+          shortName: 'Short name',
+          address: 'Address',
+          venue: 'Venue',
           id: 'Edit'
         },
         sortable: [
           'no',
           'name',
-          'countryCode',
-          'parentAreaId',
-          'parentArea'
+          'shortName',
+          'address',
+          'venue'
         ],
         filterable: [
           'name',
-          'countryCode',
-          'parentAreaId',
-          'parentArea'
+          'shortName',
+          'address',
+          'venue'
         ]
       }
     }
@@ -68,13 +68,16 @@ export default {
 
   mounted() {
     axios({
-      url: 'http://api.football-data.org/v2/areas',
+      url: 'http://api.football-data.org/v2/teams',
       method: 'get',
-      headers : headers
+      headers : headers,
+      params: {
+        areas: 2114
+      }
     })
 
     .then(response => {
-      let data = response.data.areas;
+      let data = response.data.teams;
       // console.log(data);
       this.response = data;
     })
