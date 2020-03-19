@@ -1,33 +1,25 @@
 <template>
   <div class="container">
 
-    <h1 class="text-center" v-if="dataReady">Team {{ response.name }}</h1>
-    <h1 class="text-center" v-else>Team</h1>
+    <h1 class="text-center" v-if="dataReady">
+      <span v-for="(item, i) in response" :key="`item-${i}`">
+        <span v-if="i == 0">
+          {{ item.area.name }}
+        </span>
+      </span>
+    </h1>
+    <h1 class="text-center" v-else>Loading</h1>
 
     <div class="row">
 
-      <div class="card col-sm-6 my-3" v-if="dataReady">
-        <div class="card-body">
-          <h5 class="card-title">{{ response.name }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ response.phone }}</h6>
-          <p class="card-text">Address : {{ response.address }}</p>
-          <a target="_blank" :href="response.website" class="card-link">Website</a>
-        </div>
-      </div>
-      <div class="card col-sm-6 mt-3" v-else>
-        <div class="card-body">
-          <h5 class="card-title">Loading...</h5>
-        </div>
-      </div>
-
       <v-client-table
-        id="team"
-        v-model="squad"
+        id="teams"
+        v-model="response"
         :columns="columns"
         :options="options">
         <span slot="no" slot-scope="props">{{ props.index }}</span>
         <button type="button" slot="id" slot-scope="props" title="Detail" class="btn btn-primary" :data-id="props.row.id">
-          <font-awesome-icon :icon="['fas', 'user']"/>
+          <font-awesome-icon :icon="['fas', 'users']"/>
         </button>
       </v-client-table>
 
@@ -38,76 +30,76 @@
 <script>
 import axios from 'axios'
 import {bus} from './../main.js';
-import {idTeam} from './Teams'
+import {id} from './Areas'
 import $ from 'jquery'
 
-export let idPlayer
+export let idTeam
 
 const headers = {
   'X-Auth-Token' : '4fb1d2a25bbd47b8b0e198981893128b'
 }
 
 export default {
-  name: 'Team',
+  name: 'Teams',
   data () {
     return {
       dataReady: false,
       columns: [
         'no',
         'name',
-        'position',
-        'nationality',
-        'shirtNumber',
+        'shortName',
+        'address',
+        'venue',
         'id'
       ],
       response: [],
-      squad: [],
       options: {
         headings: {
           no: 'No',
           name: 'Name',
-          position: 'Position',
-          nationality: 'Nationality',
-          shirtNumber: 'Shirt number',
+          shortName: 'Short name',
+          address: 'Address',
+          venue: 'Venue',
           id: 'Edit'
         },
         sortable: [
           'no',
           'name',
-          'position',
-          'nationality',
-          'shirtNumber'
+          'shortName',
+          'address',
+          'venue'
         ],
         filterable: [
           'name',
-          'position',
-          'nationality',
-          'shirtNumber'
+          'shortName',
+          'address',
+          'venue'
         ]
       }
     }
   },
 
   mounted() {
-    $('#app').on('click', '#team .btn-primary', function() {
-      idPlayer = $(this).data("id");
-      switchComponent('player');
+    $('#app').on('click', '#teams .btn-primary', function() {
+      idTeam = $(this).data("id");
+      switchComponent('team');
     });
     function switchComponent(comp) {
       bus.$emit('switchComp', comp);
     }
     axios({
-      url: 'http://api.football-data.org/v2/teams/' + idTeam,
+      url: 'http://api.football-data.org/v2/teams',
       method: 'get',
-      headers : headers
+      headers : headers,
+      params: {
+        areas: id
+      }
     })
 
     .then(response => {
-      let data = response.data;
-      let squad = response.data.squad;
+      let data = response.data.teams;
       // console.log(data);
       this.response = data;
-      this.squad = squad;
       this.dataReady = true;
     })
     .catch(error => {

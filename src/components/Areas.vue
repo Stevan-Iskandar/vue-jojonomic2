@@ -1,9 +1,12 @@
 <template>
   <div class="container">
+
+    <h1 class="text-center">Area</h1>
+
     <div class="row">
 
       <v-client-table
-        id="dataTable"
+        id="area"
         v-model="response"
         :columns="columns"
         :options="options">
@@ -19,12 +22,17 @@
 
 <script>
 import axios from 'axios'
+import {bus} from './../main.js';
+import $ from 'jquery'
+
+export let id
+
 const headers = {
   'X-Auth-Token' : '4fb1d2a25bbd47b8b0e198981893128b'
 }
 
 export default {
-  name: 'Area',
+  name: 'Areas',
   data () {
     return {
       columns: [
@@ -62,11 +70,14 @@ export default {
     }
   },
 
-  methods: {
-    // 
-  },
-
   mounted() {
+    $('#app').on('click', '#area .btn-primary', function() {
+      id = $(this).data("id");
+      switchComponent('teams');
+    });
+    function switchComponent(comp) {
+      bus.$emit('switchComp', comp);
+    }
     axios({
       url: 'http://api.football-data.org/v2/areas',
       method: 'get',

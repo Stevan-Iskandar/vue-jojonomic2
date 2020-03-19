@@ -3,15 +3,9 @@
     <div class="container">
       <button
         class="switch area"
-        @click="switchComponent('area')"
-        :disabled="currentComp === 'area'">
-        area
-      </button>
-      <button
-        class="switch team"
-        @click="switchComponent('team')"
-        :disabled="currentComp === 'team'">
-        team
+        @click="switchComponent('areas')"
+        :disabled="currentComp === 'areas'">
+        back
       </button>
     </div>
     <component :is="currentComp"></component>
@@ -19,9 +13,11 @@
 </template>
 
 <script>
-import Area from './components/Area'
+import Areas from './components/Areas'
+import Teams from './components/Teams'
 import Team from './components/Team'
-import {bus} from './main.js';
+import Player from './components/Player'
+import {bus} from './main.js'
 import $ from 'jquery'
 
 export default {
@@ -29,7 +25,7 @@ export default {
 
   data () {
     return {
-      currentComp: Area
+      currentComp: 'areas'
     };
   },
 
@@ -46,13 +42,15 @@ export default {
   },
 
   components: {
-    'area': Area,
-    'team': Team
+    'areas': Areas,
+    'teams': Teams,
+    'team': Team,
+    'player': Player
   },
 
   mounted () {
     $('#app').on('click', '#dataTable .btn-primary', function() {
-      alert('ok');
+      // alert('ok');
     });
   }
 }
